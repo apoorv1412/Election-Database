@@ -134,12 +134,17 @@ FROM voter
 WHERE voter.age<=30;
 
 # Query 3: Select the party id which won the maximum votes. (Change to name)
-SELECT party_id, COUNT(party_id)
-FROM votes_for GROUP BY party_id HAVING COUNT(party_id)=(
-	SELECT MAX(count)
-    FROM (
-		SELECT party_id, COUNT(party_id) count
-        FROM votes_for GROUP BY party_id) as P1) ;
+SELECT par_name
+FROM party
+WHERE party_id in (
+	SELECT party_id
+	FROM votes_for GROUP BY party_id HAVING COUNT(party_id)=(
+		SELECT MAX(count)
+		FROM (
+			SELECT party_id, COUNT(party_id) count
+			FROM votes_for GROUP BY party_id) as P1
+		) 
+	);
 
 # Query 4: Select names of those voters who voted for Democrat candidate in Winterfell.
 SELECT per_name
